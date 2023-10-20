@@ -1,5 +1,6 @@
-import json
 import os
+import json
+import psycopg2
 from http.server import BaseHTTPRequestHandler
 from datetime import datetime
 import pytz
@@ -15,14 +16,35 @@ class handler(BaseHTTPRequestHandler):
         madrid_tz = pytz.timezone('Europe/Madrid')
         madrid_time = datetime.now(madrid_tz).strftime('%Y-%m-%d %H:%M:%S')
 
-        # Get the TEST_ID environment variable
-        test_id = os.environ.get('TEST_ID', 'Not set')
+        # Get the environment variables
+        postgres_user = os.environ['POSTGRES_USER']
+        postgres_password = os.environ['POSTGRES_PASSWORD']
+        postgres_host = os.environ['POSTGRES_HOST']
+        postgres_database = os.environ['POSTGRES_DATABASE']
+
+        # Connect to the PostgreSQL database
+        conn = psycopg2.connect(
+            dbname=postgres_database,
+            user=postgres_user,
+            password=postgres_password,
+            host=postgres_host
+        )
+
+        # Create a cursor object
+        cur = conn.cursor()
+
+        # Execute a SQL query to fetch data from the "pilgrims" table
+        cur.execute("SELECT * FROM pilgrims;")
+        pilgrims_data = cur.fetchall()
+
+        # Close the cursor and connection
+        cur.close()
+        conn.close()
 
         response_dict = {
             "message": "Hello guys!",
             "timestamp": madrid_time,
-            "test_id": test_id
+            "pilgrims_data": pilgrims_data
         }
         self.wfile.write(json.dumps(response_dict).encode('utf-8'))
         return
-
