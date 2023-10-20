@@ -34,8 +34,11 @@ class handler(BaseHTTPRequestHandler):
         cur = conn.cursor()
 
         # Execute a SQL query to fetch data from the "pilgrims" table
-        cur.execute("SELECT * FROM pilgrims;")
-        pilgrims_data = cur.fetchall()
+        cur.execute("SELECT num_pilgrims, date FROM pilgrims;")
+        pilgrims_data_raw = cur.fetchall()
+
+        # Format the data as a list of dictionaries
+        pilgrims_data = [{"num_pilgrims": row[0], "date": row[1].strftime('%Y-%m-%d')} for row in pilgrims_data_raw]
 
         # Close the cursor and connection
         cur.close()
