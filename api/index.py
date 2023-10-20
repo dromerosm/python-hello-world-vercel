@@ -1,4 +1,5 @@
 import json
+import os
 from http.server import BaseHTTPRequestHandler
 from datetime import datetime
 import pytz
@@ -14,9 +15,14 @@ class handler(BaseHTTPRequestHandler):
         madrid_tz = pytz.timezone('Europe/Madrid')
         madrid_time = datetime.now(madrid_tz).strftime('%Y-%m-%d %H:%M:%S')
 
+        # Get the TEST_ID environment variable
+        test_id = os.environ.get('TEST_ID', 'Not set')
+
         response_dict = {
             "message": "Hello guys!",
-            "timestamp": madrid_time
+            "timestamp": madrid_time,
+            "test_id": test_id
         }
         self.wfile.write(json.dumps(response_dict).encode('utf-8'))
         return
+
