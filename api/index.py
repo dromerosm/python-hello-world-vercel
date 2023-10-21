@@ -11,7 +11,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 interval_counter = 0
 
 # Capture the start time of the machine
-start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+# Get the current time in Madrid
+madrid_st_tz = pytz.timezone('Europe/Madrid')
+start_time = datetime.now(madrid_st_tz).strftime('%Y-%m-%d %H:%M:%S')
 
 def increment_counter():
     global interval_counter
