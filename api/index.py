@@ -3,7 +3,28 @@ import json
 import psycopg2
 from http.server import BaseHTTPRequestHandler
 from datetime import datetime
+import threading
 import pytz
+
+# Basic Scheduler
+
+# Global counter to keep track of 30 minute intervals
+interval_counter = 0
+
+# Capture the start time of the machine
+start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
+def scheduler():
+    global interval_counter
+    while True:
+        time.sleep(60)  # Sleep for 30 minutes
+        interval_counter += 1
+
+# Start the scheduler in a separate thread
+scheduler_thread = threading.Thread(target=scheduler)
+scheduler_thread.daemon = True  # Daemonize the thread so it exits when the main program exits
+scheduler_thread.start()
+
 
 class handler(BaseHTTPRequestHandler):
 
@@ -47,7 +68,9 @@ class handler(BaseHTTPRequestHandler):
         response_dict = {
             "message": "Hello guys!",
             "timestamp": madrid_time,
-            "pilgrims_data": pilgrims_data
+            "pilgrims_data": pilgrims_data,
+            "intervals_passed": interval_counter,  # Include the interval counter in the response
+            "machine_start_time": start_time  # Include the machine start time in the response
         }
         self.wfile.write(json.dumps(response_dict).encode('utf-8'))
         return
