@@ -26,7 +26,7 @@ def increment_counter():
 
 # Configure the scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_job(increment_counter, 'interval', minutes=30)
+scheduler.add_job(increment_counter, 'interval', minutes=1)
 scheduler.start()
 logging.info("... Scheduler CONFIGURADO ...")
 
