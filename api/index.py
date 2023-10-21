@@ -28,6 +28,7 @@ def increment_counter():
 scheduler = BackgroundScheduler()
 scheduler.add_job(increment_counter, 'interval', minutes=30)
 scheduler.start()
+logging.info("... Scheduler CONFIGURADO ...")
 
 
 class handler(BaseHTTPRequestHandler):
