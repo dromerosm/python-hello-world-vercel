@@ -6,24 +6,20 @@ from datetime import datetime
 import threading
 import pytz
 
-# Basic Scheduler
-
 # Global counter to keep track of 30 minute intervals
 interval_counter = 0
 
 # Capture the start time of the machine
 start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
-def scheduler():
+def increment_counter():
     global interval_counter
-    while True:
-        time.sleep(60)  # Sleep for 30 minutes
-        interval_counter += 1
+    interval_counter += 1
 
-# Start the scheduler in a separate thread
-scheduler_thread = threading.Thread(target=scheduler)
-scheduler_thread.daemon = True  # Daemonize the thread so it exits when the main program exits
-scheduler_thread.start()
+# Configure the scheduler
+scheduler = BackgroundScheduler()
+scheduler.add_job(increment_counter, 'interval', minutes=30)
+scheduler.start()
 
 
 class handler(BaseHTTPRequestHandler):
