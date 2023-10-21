@@ -7,6 +7,10 @@ import threading
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 # Global counter to keep track of 30 minute intervals
 interval_counter = 0
 
@@ -17,6 +21,7 @@ start_time = datetime.now(madrid_st_tz).strftime('%Y-%m-%d %H:%M:%S')
 
 def increment_counter():
     global interval_counter
+    logging.info("... se ha ejecutado el scheduler...")
     interval_counter += 1
 
 # Configure the scheduler
