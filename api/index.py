@@ -5,6 +5,7 @@ from http.server import BaseHTTPRequestHandler
 from datetime import datetime
 import threading
 import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # Global counter to keep track of 30 minute intervals
 interval_counter = 0
